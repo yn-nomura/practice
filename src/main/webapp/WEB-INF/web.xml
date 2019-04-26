@@ -19,6 +19,24 @@
     <servlet-name>Jersey Web Application</servlet-name>
     <url-pattern>/api/v1.1/*</url-pattern>
   </servlet-mapping>
-
-
+  <servlet>
+    <description></description>
+    <display-name>ExpensesListServlet</display-name>
+    <servlet-name>ExpensesListServlet</servlet-name>
+    <servlet-class>java_s04.ExpensesListServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ExpensesListServlet</servlet-name>
+    <url-pattern>/ExpensesListServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ExpensesList</display-name>
+    <servlet-name>ExpensesList</servlet-name>
+    <servlet-class>ExpensesListServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ExpensesList</servlet-name>
+    <url-pattern>/ExpensesList</url-pattern>
+  </servlet-mapping>
 </web-app>
