@@ -21,13 +21,12 @@ function executeAjax () {
 					var expensesElemens=json[i];
 
 					tableElements+='<tr>';
-					var num = department.departmentCategory;
-					var name = department.department;
-					tableElements+='<td>'+num+'</td>'+'<td>'+name+'</td>';
+					tableElements+='<td>'++'</td>'+'<td>'++'</td>'+'<td>'++'</td>'+'<td>'++'</td>'+'<td>'++'</td>'
+					+'<td>'++'</td>'+'<td>'++'</td>';
 					tableElements+='</tr>';
 
 				}
-				var marge=preTableElements+tableElements;
+				var marge = preTableElements+tableElements;
 				$('#expensesList').append(marge);
 
 			},function(XMLHttpRequest,textStatus,errorThrown){

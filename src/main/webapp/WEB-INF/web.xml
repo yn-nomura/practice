@@ -39,4 +39,14 @@
     <servlet-name>ExpensesList</servlet-name>
     <url-pattern>/ExpensesList</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ExpensesLists</display-name>
+    <servlet-name>ExpensesLists</servlet-name>
+    <servlet-class>java_s04.ExpensesLists</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ExpensesLists</servlet-name>
+    <url-pattern>/ExpensesLists</url-pattern>
+  </servlet-mapping>
 </web-app>
