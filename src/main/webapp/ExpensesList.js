@@ -21,8 +21,8 @@ function executeAjax () {
 					var expensesElemens=json[i];
 
 					tableElements+='<tr>';
-					tableElements+='<td>'++'</td>'+'<td>'++'</td>'+'<td>'++'</td>'+'<td>'++'</td>'+'<td>'++'</td>'
-					+'<td>'++'</td>'+'<td>'++'</td>';
+					tableElements+='<td>'+'</td>'+'<td>'+'</td>'+'<td>'+'</td>'+'<td>'+'</td>'+'<td>'+'</td>'
+					+'<td>'+'</td>'+'<td>'+'</td>';
 					tableElements+='</tr>';
 
 				}
