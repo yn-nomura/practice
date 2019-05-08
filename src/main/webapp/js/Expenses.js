@@ -44,4 +44,35 @@ function findAll(){
 			$('#expenses').append(table);
 		}
 	}
+
+	function addExpenses(){
+		console.log('addExpenses start.')
+		$.ajax({
+			type: "POST",
+			contentType: "application/json",
+			url: "rootUrl",
+			dataType:"json",
+			data: formToJson(),
+			success: function(data,textStatus,jqXHR){
+				alert('経費情報の登録に成功しました');
+				findAll();
+			},
+			error: function(jqXHR,textStatus, errorThrown){
+				alert('経費登録の登録に失敗しました')
+			}
+		})
+	}
+
+	function deleteById(id){
+		console.log('delete start - id:'+id)
+		$.ajax({
+			type: "DELETE",
+			url: rootUrl+'/'+id,
+			success: function(){
+				findAll();
+				$('#expensesId').val('');
+				$('#name').val('');
+			}
+		});
+	}
 }

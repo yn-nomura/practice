@@ -3,9 +3,11 @@ package java_s04;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
@@ -40,6 +42,14 @@ import dao.ExpensesDAO;
 		public Expenses create(Expenses expenses) throws WebApplicationException{
 			validate(expenses);
 			return dao.create(expenses);
+		}
+
+		/**
+		 * 指定したIDの経費情報を削除する*/
+		@DELETE
+		@Path("{id}")
+		public void remove(@PathParam("id")int id){
+			dao.remove(id);
 		}
 
 		/**

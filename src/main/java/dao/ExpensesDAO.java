@@ -36,6 +36,10 @@ public class ExpensesDAO {
 			"and EL.STATUS_ID=ST.STATUS_ID \n" +
 			"and EL.APP_NAME_ID=EM.ID \n";
 
+	private static final String INSERT_QUERY ="";
+
+	private static final String DELETE_QUERY="DELETE FROM EXPENSES_LIST WHERE APPLICATION_ID =?";
+
 	/**
 	 * 経費一覧の一部を取得する
 	 */
@@ -67,6 +71,54 @@ public class ExpensesDAO {
 		return result;
 
 	}
+
+	/**
+	 * 新規登録*
+	 */
+	 public Expenses create(Expenses expenses){
+		 Connection connection = ConnectionProvider.getConnection();
+			if (connection == null) {
+				return expenses;
+			}
+
+			try (PreparedStatement statement = connection.prepareStatement(INSERT_QUERY, new String[] { "ID" });) {
+				// INSERT実行
+
+
+				// INSERTできたらKEYを取得
+				ResultSet rs = statement.getGeneratedKeys();
+				rs.next();
+				int id = rs.getInt(1);
+				expenses.setId(id);
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			} finally {
+				ConnectionProvider.close(connection);
+			}
+
+			return expenses;
+		}
+
+
+	 /**指定されてidでデータ削除*/
+	 public boolean remove(int id){
+		 Connection connection = ConnectionProvider.getConnection();
+			if (connection == null) {
+				return false;
+			}
+
+			int count = 0;
+			try (PreparedStatement statement = connection.prepareStatement(DELETE_QUERY)) {
+				// DELETE実行
+				statement.setInt(1, id);
+				count = statement.executeUpdate();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				ConnectionProvider.close(connection);
+			}
+			return count == 1;
+	 }
 
 	/**
 	 * 検索結果行をオブジェクトとして構成する。
