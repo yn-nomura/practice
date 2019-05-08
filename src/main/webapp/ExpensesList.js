@@ -40,8 +40,6 @@ function renderTable(data){
 					$('<button>').text("詳細表示").attr("type","button").attr("onclick")
 					);
 		});
+		$('#expenses').append(table);
 	}
-
-
-
 }

@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import beans.Employee;
-
+/**
+ * 経費データを扱うDAO*/
 public class ExpensesDAO {
 	/**
 	 * クエリ文字列
