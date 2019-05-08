@@ -100,6 +100,7 @@ function deleteById(id) {
 }
 
 function renderTable(data) {
+	console.log('返却値',data);
 	var headerRow = '<tr><th>ID</th><th>部署名</th></tr>';
 
 	$('#posts').children().remove();

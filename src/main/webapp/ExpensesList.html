@@ -3,19 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <title>経費一覧</title>
+<link rel="stylesheet" href="css/postStyle.css">
 </head>
 <body>
-<div class="header">
-<h1>経費一覧</h1>
-</div>
-<div class="content">
-<table id=expensesList>
-
-<tr><th>項目名</th><th>申請ID</th><th>申請日</th><th>更新日</th><th>申請者</th><th>タイトル</th><th>金額</th><th>ステータス</th></tr>
-<tr></tr>
-</table>
-<input type="button" value="詳細表示" id="elDetail">
-</div>
-
+	<div class="main clearfix">
+		<div id="list">
+			<p>経費一覧:</p>
+			<div id="expenses"></div>
+			<div id="insertBlock"></div>
+		</div>
+	</div>
+	<script src="js/jquery-3.3.1.min.js"></script>
+	<script src="js/Expenses.js"></script>
 </body>
 </html>
