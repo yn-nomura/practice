@@ -4,12 +4,26 @@ var rootUrl="/java_s04/api/v1.1/expenses";
 
 findAll();
 
+$('#saveExpense').click(function() {
+
+	var id = $('#eaId').val()
+	if (id == '')
+		addExpenses();
+	else
+		updateExpenses(expensesId);
+	return false;
+})
+
 
 $('#expenseDetail').click(function(){
 	var id = q;
 	findDetail(id);
 });
 
+$('#newExpense').click(function(){
+		renderDetails({});
+
+});
 
 
 function findAll(){
@@ -22,14 +36,27 @@ function findAll(){
 	});
 }
 
+function findById(id){
+	console.log('findById Start - id:'+id);
+	$.ajax({
+	type: "GET",
+	url: rootUrl+'/'+id,
+	dataType:'json',
+	success:function(data){
+		console.log('findById success:' +data);
+		renderDetails(data)
+	}
+	});
+}
+
 function addExpenses(){
 	console.log('addExpenses start.')
 	$.ajax({
 		type: "POST",
 		contentType: "application/json",
-		url: "rootUrl",
+		url: rootUrl,
 		dataType:"json",
-		data: formToJson(),
+		data: formToJSON(),
 		success: function(data,textStatus,jqXHR){
 			alert('経費情報の登録に成功しました');
 			$('#eaId').val(data,id);
@@ -153,6 +180,19 @@ function renderDetailTable(data){
 	}
 }
 
+function renderDetails(expenses){
+	console.log('renderDetails start');
+	$('.error').text('');
+	$('#eaId').val(expenses.applicationId);
+	$('#eaDay').val(expenses.applicationDate);
+	$('#eaUpDay').val(expenses.updateDate);
+	$('#eaName').val(expenses.name);
+	$('#eaEName').val(expenses.expensesName);
+
+	$('#eaMoney').val(expenses.amountOfMoney);
+	$('#eaSta').val(expenses.statusName);
+}
+
 function formToJSON(){
 	var expenseId = $('#eaId').val();
 	return JSON.stringify({
@@ -161,7 +201,7 @@ function formToJSON(){
 		"eaUpDay":$("#eaUpDay").val(),
 		"eaName ":$("#eaName").val(),
 		"eaEName":$("#eaEName").val(),
-		"eaPay":$("#eaPay").val(),
+
 		"eaMoney":$("#eaMoney").val(),
 		"easta":$("#eaSta").val()
 	})

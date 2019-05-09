@@ -6,6 +6,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -35,13 +36,13 @@ import dao.ExpensesDAO;
 		}
 
 		/**
-		 * 一単葉に部署情報の詳細を取得する
+		 *
 		 * */
 		@GET
 		@Path("{id}")
 		@Produces(MediaType.APPLICATION_JSON)
-		public List<Expenses>findDetail(@PathParam("id")int id){
-			return dao.findDetail(id);
+		public Expenses findDetail(@PathParam("id")int id){
+			return dao.findById(id);
 		}
 
 
@@ -53,6 +54,17 @@ import dao.ExpensesDAO;
 		public Expenses create(Expenses expenses) throws WebApplicationException{
 			validate(expenses);
 			return dao.create(expenses);
+		}
+
+		/**
+		 * 指定した情報で更新
+		 */
+		@PUT
+		@Path("{eaId}")
+		@Produces(MediaType.APPLICATION_JSON)
+		public void update(Expenses expenses)throws WebApplicationException{
+			validate(expenses);
+			dao.update(expenses);
 		}
 
 		/**

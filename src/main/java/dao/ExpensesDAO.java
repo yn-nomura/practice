@@ -58,9 +58,31 @@ public class ExpensesDAO {
 			"and EL.APP_NAME_ID=EM.ID \n" +
 			"and EL.UPDATE_ID = EME.ID \n";
 
+	private static final String SELECT_BY_ID_QUERY = "select  \n" +
+			"EL.APPLICATION_ID \n" +
+			",EL.APPLICATION_DATE \n" +
+			",EL.UPDATE_DATE \n" +
+			",EM.NAME \n" +
+			",SL.EXPENSES_NAME \n" +
+			",EL.AMOUNTOFMONEY \n" +
+			",ST.STATUS_NAME \n" +
+			"from \n" +
+			"EXPENSES_LIST EL \n" +
+			",EMPLOYEE EM \n" +
+			",STATUS ST \n" +
+			",SPENDING_LIST SL \n" +
+			"where \n" +
+			"1=1 \n" +
+			"and EL.APPLICATION_ID= ? \n"+
+			"and EL.EXPENSES_ID=SL.EXPENSES_ID \n" +
+			"and EL.STATUS_ID=ST.STATUS_ID \n" +
+			"and EL.APP_NAME_ID=EM.ID \n";
+
 	private static final String INSERT_QUERY ="insert into"
 			+"EXPENSES_LIST(APPLICATION_ID,APPLICATION_DATE,UPDATE_DATE,APP_NAME_ID,EXPENSES_ID,PAYMENT,AMOUNTOFMONEY,STATUS_ID,UPDATE_ID)"
 			+"values(?,?,?,?,?,?,?,?,?)";
+
+	private static final String UPDATE_QUERY = "UPDATE EXPENSES_LIST SET APPLICATION_DATE=? UPDATE_DATE=? APP_NAME_ID=? EXPENSES_ID=? PAYMENT=? AMOUNTOFMONEY=? STATUS_ID=? WHERE APPLICATION_ID=?";
 
 	private static final String DELETE_QUERY="DELETE FROM EXPENSES_LIST WHERE APPLICATION_ID =?";
 
@@ -98,22 +120,49 @@ public class ExpensesDAO {
 
 	/**
 	 * 経費の詳細を取得する*/
-	public List<Expenses>findDetail(int id){
-		List<Expenses>result = new ArrayList<>();
+//	public List<Expenses>findDetail(int id){
+//		List<Expenses>result = new ArrayList<>();
+//		Connection connection = ConnectionProvider.getConnection();
+//		if(connection == null){
+//			return result;
+//		}
+//		try (Statement statement = connection.createStatement();){
+//			ResultSet rs = statement.executeQuery(SELECT_BY_ID_QUERY);
+//			statement.setInt(1, id);
+//			while(rs.next()){
+//				result.add(processDetailRow(rs));
+//			}
+//		}catch(SQLException e){
+//			e.printStackTrace();
+//		}finally{
+//			ConnectionProvider.close(connection);
+//		}
+//		return result;
+//	}
+
+
+	public Expenses findById(int id) {
+		Expenses result = null;
+
 		Connection connection = ConnectionProvider.getConnection();
-		if(connection == null){
+		if (connection == null) {
 			return result;
 		}
-		try (Statement statement = connection.createStatement();){
-			ResultSet rs = statement.executeQuery(SELECT_DETAIL_QUERY);
-			while(rs.next()){
-				result.add(processDetailRow(rs));
+
+		try (PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID_QUERY)) {
+			statement.setInt(1, id);
+
+			ResultSet rs = statement.executeQuery();
+
+			if (rs.next()) {
+				result = processRow(rs);
 			}
-		}catch(SQLException e){
+		} catch (SQLException e) {
 			e.printStackTrace();
-		}finally{
+		} finally {
 			ConnectionProvider.close(connection);
 		}
+
 		return result;
 	}
 
@@ -144,6 +193,31 @@ public class ExpensesDAO {
 			return expenses;
 		}
 
+
+	 public boolean update(Expenses expenses){
+		 Connection connection = ConnectionProvider.getConnection();
+		 if (connection == null) {
+				return false;
+			}
+
+			int count = 0;
+			try (PreparedStatement statement = connection.prepareStatement(UPDATE_QUERY)) {
+				statement.setInt(1,expenses.getApplicationId());
+				statement.setString(2,expenses.getApplicationDate());
+				statement.setString(3,expenses.getUpdateDate());
+				statement.setString(4,expenses.getName());
+				statement.setString(5,expenses.getExpensesName());
+				statement.setString(6,expenses.getAmountOfMoney());
+				statement.setString(7,expenses.getStatusName());
+				count = statement.executeUpdate();
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			} finally {
+				ConnectionProvider.close(connection);
+			}
+
+			return count == 1;
+	 }
 
 	 /**指定されてidでデータ削除*/
 	 public boolean remove(int id){
