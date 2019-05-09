@@ -36,7 +36,31 @@ public class ExpensesDAO {
 			"and EL.STATUS_ID=ST.STATUS_ID \n" +
 			"and EL.APP_NAME_ID=EM.ID \n";
 
-	private static final String INSERT_QUERY ="";
+	private static final String SELECT_DETAIL_QUERY = "select \n" +
+			"EL.APPLICATION_ID \n" +
+			",EL.APPLICATION_DATE \n" +
+			",EL.UPDATE_DATE \n" +
+			",EM.NAME \n" +
+			",SL.EXPENSES_NAME \n" +
+			",EL.AMOUNTOFMONEY \n" +
+			",ST.STATUS_NAME \n" +
+			",EME.NAME \n" +
+			"from \n" +
+			"EXPENSES_LIST EL \n" +
+			",EMPLOYEE EM \n" +
+			",STATUS ST \n" +
+			",SPENDING_LIST SL \n" +
+			",EMPLOYEE EME \n" +
+			"where \n" +
+			"1=1 \n" +
+			"and EL.EXPENSES_ID=SL.EXPENSES_ID \n" +
+			"and EL.STATUS_ID=ST.STATUS_ID \n" +
+			"and EL.APP_NAME_ID=EM.ID \n" +
+			"and EL.UPDATE_ID = EME.ID \n";
+
+	private static final String INSERT_QUERY ="insert into"
+			+"EXPENSES_LIST(APPLICATION_ID,APPLICATION_DATE,UPDATE_DATE,APP_NAME_ID,EXPENSES_ID,PAYMENT,AMOUNTOFMONEY,STATUS_ID,UPDATE_ID)"
+			+"values(?,?,?,?,?,?,?,?,?)";
 
 	private static final String DELETE_QUERY="DELETE FROM EXPENSES_LIST WHERE APPLICATION_ID =?";
 
@@ -73,6 +97,27 @@ public class ExpensesDAO {
 	}
 
 	/**
+	 * 経費の詳細を取得する*/
+	public List<Expenses>findDetail(int id){
+		List<Expenses>result = new ArrayList<>();
+		Connection connection = ConnectionProvider.getConnection();
+		if(connection == null){
+			return result;
+		}
+		try (Statement statement = connection.createStatement();){
+			ResultSet rs = statement.executeQuery(SELECT_DETAIL_QUERY);
+			while(rs.next()){
+				result.add(processDetailRow(rs));
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+		}finally{
+			ConnectionProvider.close(connection);
+		}
+		return result;
+	}
+
+	/**
 	 * 新規登録*
 	 */
 	 public Expenses create(Expenses expenses){
@@ -83,13 +128,13 @@ public class ExpensesDAO {
 
 			try (PreparedStatement statement = connection.prepareStatement(INSERT_QUERY, new String[] { "ID" });) {
 				// INSERT実行
-
-
+				setParameter(statement,expenses,false);
+				statement.executeUpdate();
 				// INSERTできたらKEYを取得
 				ResultSet rs = statement.getGeneratedKeys();
 				rs.next();
 				int id = rs.getInt(1);
-				expenses.setId(id);
+				expenses.setApplicationId(id);
 			} catch (SQLException ex) {
 				ex.printStackTrace();
 			} finally {
@@ -136,6 +181,20 @@ public class ExpensesDAO {
 		result.setExpensesName(rs.getString("EXPENSES_NAME"));
 		result.setAmountOfMoney(rs.getString("AMOUNTOFMONEY"));
 		result.setStatusName(rs.getString("STATUS_NAME"));
+		return result;
+	}
+
+	private Expenses processDetailRow(ResultSet rs) throws SQLException {
+		Expenses result = new Expenses();
+//		Expensesの本体の再現
+		result.setApplicationId(rs.getInt("APPLICATION_ID"));
+		result.setApplicationDate(rs.getString("APPLICATION_DATE"));
+		result.setUpdateDate(rs.getString("UPDATE_DATE"));
+		result.setName(rs.getString("NAME"));
+		result.setExpensesName(rs.getString("EXPENSES_NAME"));
+		result.setAmountOfMoney(rs.getString("AMOUNTOFMONEY"));
+		result.setStatusName(rs.getString("STATUS_NAME"));
+		result.setName(rs.getString("NAME"));
 		return result;
 	}
 

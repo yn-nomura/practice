@@ -35,6 +35,17 @@ import dao.ExpensesDAO;
 		}
 
 		/**
+		 * 一単葉に部署情報の詳細を取得する
+		 * */
+		@GET
+		@Path("{id}")
+		@Produces(MediaType.APPLICATION_JSON)
+		public List<Expenses>findDetail(@PathParam("id")int id){
+			return dao.findDetail(id);
+		}
+
+
+		/**
 		 * 指定した経費情報を登録*/
 		@POST
 		@Consumes(MediaType.APPLICATION_JSON)
