@@ -11,8 +11,49 @@
 			<p>経費一覧:</p>
 			<div id="expenses"></div>
 			<div id="insertBlock"></div>
-
+			<button type="button" id="newExpense">経費申請</button>
 		</div>
+	</div>
+	<div id="detail">
+		<p>経費申請データ</p>
+		<form id="expenseForm">
+			<div class="error"></div>
+			<div>
+				<label for="eaId">申請ID:</label> <input type="text" name=eaId
+					id="eaId" disabled>
+			</div>
+			<div>
+				<label for="eaDay">申請日:</label> <input type="text" name="eaDay"
+					id="eaDay">
+			</div>
+			<div>
+				<label for="eaUpDay">更新日:</label> <input type="text" name="eaUpDay"
+					id="eaUpDay">
+			</div>
+			<div>
+				<label for="eaName">申請者名:</label> <input type="text" name="eaName"
+					id="eaName">
+			</div>
+			<div>
+				<label for="eaEName">タイトル:</label> <input type="text" name="eaEName"
+					id="eaEName">
+			</div>
+			<div>
+				<label for="eaPay">支払先:</label> <input type="text" name="eaPay"
+					id="eaPay">
+			</div>
+			<div>
+				<label for="eaMoney">金額:</label> <input type="text" name="eaMoney"
+					id="eaMoney">
+			</div>
+			<div>
+				<label for="eaSta">ステータス:</label> <input type="text" name="eaSta"
+					id="eaSta">
+			</div>
+			<div>
+				<button id="saveExpense">保存</button>
+			</div>
+		</form>
 	</div>
 	<script src="js/jquery-3.3.1.min.js"></script>
 	<script src="js/Expenses.js"></script>

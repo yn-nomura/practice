@@ -6,8 +6,11 @@ findAll();
 
 
 $('#expenseDetail').click(function(){
-	findDetail();
+	var id = q;
+	findDetail(id);
 });
+
+
 
 function findAll(){
 	console.log('findAll start.')
@@ -29,6 +32,7 @@ function addExpenses(){
 		data: formToJson(),
 		success: function(data,textStatus,jqXHR){
 			alert('経費情報の登録に成功しました');
+			$('#eaId').val(data,id);
 			findAll();
 		},
 		error: function(jqXHR,textStatus, errorThrown){
@@ -37,15 +41,36 @@ function addExpenses(){
 	});
 }
 
-function deleteById(id){
-	console.log('delete start - id:'+id)
+function updateExpense(expensesId){
+	console.log('updateExpense start');
+	$.ajax({
+		type: "PUT",
+		contentType: "application/json",
+		url: rootUrl+'/'+expensesId,
+		dataType: "json",
+		data: formToJSON(),
+		success: function(data,textStatus,jqXHR){
+			alert('経費データの更新に成功しました');
+			findAll();
+		},
+		error: function(jqXHR,textStatus,errorThrown){
+			alert('経費データの更新に失敗しました')
+		}
+	})
+}
+
+function deleteById(applicationId){
+	console.log('delete start - id:'+applicationId)
 	$.ajax({
 		type: "DELETE",
-		url: rootUrl+'/'+id,
+		url: rootUrl+'/'+applicationId,
 		success: function(){
+			alert("経費登録の削除に成功しました");
 			findAll();
-			$('#expensesId').val('');
-			$('#name').val('');
+
+		},
+		error : function(jqXHR, textStatus, errorThrown){
+			alert('社員データの削除に失敗しました');
 		}
 	});
 }
@@ -59,6 +84,7 @@ function findDetail(id){
 		success: renderDetailTable
 	});
 }
+
 function renderTable(data){
 	//確認
 	console.log('返却値',data);
@@ -82,11 +108,17 @@ function renderTable(data){
 			row.append($('<td>').text(expenses.expensesName));
 			row.append($('<td>').text(expenses.amountOfMoney));
 			row.append($('<td>').text(expenses.statusName));
+			row.append($('<td>').append(
+					$('<button>').text("編集").attr("type","button").attr("onclick", "findById("+expenses.applicationId+')')
+				));
+			row.append($('<td>').append(
+					$('<button>').text("削除").attr("type","button").attr("onclick", "deleteById("+expenses.applicationId+')')
+				));
 
 			table.append(row);
 		});
 		$('#expenses').append(table);
-		var btn = '<td><button type="button" onclick="expenseDetail(1)">詳細表示</button></td>';
+		var btn = '<td><button type="button" id="expenseDetail">詳細表示</button></td>';
 		table.append(btn);
 	}
 }
@@ -119,4 +151,18 @@ function renderDetailTable(data){
 		});
 		$('#expenses').append(table);
 	}
+}
+
+function formToJSON(){
+	var expenseId = $('#eaId').val();
+	return JSON.stringify({
+		"eaId":(eaId == ""? 0 :eaId),
+		"eaDay":$("#eaDay").val(),
+		"eaUpDay":$("#eaUpDay").val(),
+		"eaName ":$("#eaName").val(),
+		"eaEName":$("#eaEName").val(),
+		"eaPay":$("#eaPay").val(),
+		"eaMoney":$("#eaMoney").val(),
+		"easta":$("#eaSta").val()
+	})
 }
